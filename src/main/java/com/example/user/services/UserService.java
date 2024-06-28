@@ -10,4 +10,6 @@ public interface UserService {
     Future<List<User>> getAllUsers();
 
     Future<Void> addUser(User user);
+
+
 }
