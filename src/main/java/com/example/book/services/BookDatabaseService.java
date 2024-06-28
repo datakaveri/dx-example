@@ -22,7 +22,7 @@ public class BookDatabaseService extends AbstractDatabaseService<Book> {
 
     @Override
     protected Future<List<Book>> getAll() {
-        Future<List<Book>> future = Future.future();
+        Future<List<Book>> future = Future.future().otherwiseEmpty();
         Query query = new Query("SELECT * FROM books", new JsonArray());
 
         eventBus.<QueryResult>request("database.query", query.toJson(), ar -> {
