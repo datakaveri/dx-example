@@ -1,1 +1,3 @@
-// Example content for README.md
+mvn clean package
+
+docker-compose up --build
