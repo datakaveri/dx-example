@@ -3,55 +3,57 @@ package com.example.user.services;
 import com.example.common.database.AbstractDatabaseService;
 import com.example.common.models.Query;
 import com.example.common.models.QueryResult;
+import com.example.postgres.services.PostgresService;
 import com.example.user.models.User;
 import io.vertx.core.Future;
-import io.vertx.core.eventbus.EventBus;
+import io.vertx.core.Promise;
 import io.vertx.core.json.JsonArray;
+import io.vertx.core.json.JsonObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDatabaseService extends AbstractDatabaseService<User> {
+public class UserDatabaseService extends AbstractDatabaseService<User> implements UserService {
 
-    private final EventBus eventBus;
+    private final PostgresService postgresService;
 
-    public UserDatabaseService(EventBus eventBus) {
-        this.eventBus = eventBus;
+    public UserDatabaseService(PostgresService postgresService) {
+        this.postgresService = postgresService;
     }
 
     @Override
-    protected Future<List<User>> getAll() {
-        Future<List<User>> future = Future.future();
+    public Future<List<User>> getAll() {
+        Promise<List<User>> promise = Promise.promise();
         Query query = new Query("SELECT * FROM users", new JsonArray());
 
-        eventBus.<QueryResult>request("database.query", query.toJson(), ar -> {
+        postgresService.executeQuery(query).onComplete(ar -> {
             if (ar.succeeded()) {
-                QueryResult result = ar.result().body();
+                QueryResult result = ar.result();
                 List<User> users = fromJsonArray(result.getRows());
-                future.complete(users);
+                promise.complete(users);
             } else {
-                future.fail(ar.cause());
+                promise.fail(ar.cause());
             }
         });
 
-        return future;
+        return promise.future();
     }
 
     @Override
-    protected Future<Void> add(User user) {
-        Future<Void> future = Future.future();
+    public Future<Void> add(User user) {
+        Promise<Void> promise = Promise.promise();
         JsonArray params = new JsonArray().add(user.getName()).add(user.getEmail());
         Query query = new Query("INSERT INTO users (name, email) VALUES (?, ?)", params);
 
-        eventBus.<QueryResult>request("database.update", query.toJson(), ar -> {
+        postgresService.executeUpdate(query).onComplete(ar -> {
             if (ar.succeeded()) {
-                future.complete();
+                promise.complete();
             } else {
-                future.fail(ar.cause());
+                promise.fail(ar.cause());
             }
         });
 
-        return future;
+        return promise.future();
     }
 
     @Override

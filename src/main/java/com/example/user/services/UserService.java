@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface UserService {
 
-    Future<List<User>> getAllUsers();
+    Future<List<User>> getAll();
 
-    Future<Void> addUser(User user);
+    Future<Void> add(User user);
 }

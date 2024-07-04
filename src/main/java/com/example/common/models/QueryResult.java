@@ -1,5 +1,7 @@
 package com.example.common.models;
 
+import java.util.List;
+
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 
@@ -15,6 +17,11 @@ public class QueryResult {
     public QueryResult(String error) {
         this.rows = new JsonArray();
         this.error = error;
+    }
+
+    public QueryResult(List<JsonObject> rows) {
+        this.rows = new JsonArray(rows); // Convert List<JsonObject> to JsonArray
+        this.error = null;
     }
 
     public JsonArray getRows() {

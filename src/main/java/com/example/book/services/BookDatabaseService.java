@@ -4,55 +4,56 @@ import com.example.book.models.Book;
 import com.example.common.database.AbstractDatabaseService;
 import com.example.common.models.Query;
 import com.example.common.models.QueryResult;
+import com.example.postgres.services.PostgresService;
 import io.vertx.core.Future;
-import io.vertx.core.eventbus.EventBus;
+import io.vertx.core.Promise;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookDatabaseService extends AbstractDatabaseService<Book> {
+public class BookDatabaseService extends AbstractDatabaseService<Book> implements BookService {
 
-    private final EventBus eventBus;
+    private final PostgresService postgresService;
 
-    public BookDatabaseService(EventBus eventBus) {
-        this.eventBus = eventBus;
+    public BookDatabaseService(PostgresService postgresService) {
+        this.postgresService = postgresService;
     }
 
     @Override
-    protected Future<List<Book>> getAll() {
-        Future<List<Book>> future = Future.future();
+    public Future<List<Book>> getAll() {
+        Promise<List<Book>> promise = Promise.promise();
         Query query = new Query("SELECT * FROM books", new JsonArray());
 
-        eventBus.<QueryResult>request("database.query", query.toJson(), ar -> {
+        postgresService.executeQuery(query).onComplete(ar -> {
             if (ar.succeeded()) {
-                QueryResult result = ar.result().body();
+                QueryResult result = ar.result();
                 List<Book> books = fromJsonArray(result.getRows());
-                future.complete(books);
+                promise.complete(books);
             } else {
-                future.fail(ar.cause());
+                promise.fail(ar.cause());
             }
         });
 
-        return future;
+        return promise.future();
     }
 
     @Override
-    protected Future<Void> add(Book book) {
-        Future<Void> future = Future.future();
+    public Future<Void> add(Book book) {
+        Promise<Void> promise = Promise.promise();
         JsonArray params = new JsonArray().add(book.getTitle()).add(book.getAuthor());
         Query query = new Query("INSERT INTO books (title, author) VALUES (?, ?)", params);
 
-        eventBus.<QueryResult>request("database.update", query.toJson(), ar -> {
+        postgresService.executeUpdate(query).onComplete(ar -> {
             if (ar.succeeded()) {
-                future.complete();
+                promise.complete();
             } else {
-                future.fail(ar.cause());
+                promise.fail(ar.cause());
             }
         });
 
-        return future;
+        return promise.future();
     }
 
     @Override

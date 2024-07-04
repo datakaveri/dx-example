@@ -4,12 +4,21 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.http.HttpServer;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
+import io.vertx.core.json.JsonArray;
+import io.vertx.core.json.JsonObject;
+
+import java.util.List;
+
 import com.example.book.models.Book;
 import com.example.book.services.BookService;
 
 public class BookController extends AbstractVerticle {
 
-    private BookService bookService = new BookService();
+    private final BookService bookService;
+
+    public BookController(BookService bookService) {
+        this.bookService = bookService;
+    }
 
     @Override
     public void start() {
@@ -23,11 +32,13 @@ public class BookController extends AbstractVerticle {
     }
 
     private void getAllBooks(RoutingContext context) {
-        bookService.getAllBooks(ar -> {
+        bookService.getAll().onComplete(ar -> {
             if (ar.succeeded()) {
+                List<Book> books = ar.result();
+                JsonArray jsonArray = new JsonArray(books);
                 context.response()
                         .putHeader("content-type", "application/json")
-                        .end(ar.result().encode());
+                        .end(jsonArray.encode());
             } else {
                 context.response()
                         .setStatusCode(500)
@@ -38,7 +49,7 @@ public class BookController extends AbstractVerticle {
 
     private void addBook(RoutingContext context) {
         Book book = context.getBodyAsJson().mapTo(Book.class);
-        bookService.addBook(book, ar -> {
+        bookService.add(book).onComplete(ar -> {
             if (ar.succeeded()) {
                 context.response()
                         .putHeader("content-type", "application/json")
