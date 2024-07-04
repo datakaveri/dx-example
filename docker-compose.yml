@@ -2,27 +2,29 @@ version: '3.8'
 
 services:
   postgres:
-    image: postgres:latest
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: mydb
+    build:
+      context: .
+      dockerfile: ./Dockerfile-postgres
     ports:
       - "5432:5432"
-    networks:
-      - vertx-network
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
 
-  vertx-app:
-    build: .
+  vertx:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
     depends_on:
       - postgres
     ports:
-      - "8080:8080"
       - "8081:8081"
       - "8082:8082"
-    networks:
-      - vertx-network
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=mydb
+      - DB_USER=user
+      - DB_PASSWORD=password
 
-networks:
-  vertx-network:
-    driver: bridge
+volumes:
+  postgres-data:

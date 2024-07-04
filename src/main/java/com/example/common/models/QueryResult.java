@@ -23,6 +23,10 @@ public class QueryResult {
         this.rows = new JsonArray(rows); // Convert List<JsonObject> to JsonArray
         this.error = null;
     }
+    public QueryResult(JsonObject json) {
+        this.rows = json.getJsonArray("rows"); // Convert List<JsonObject> to JsonArray
+        this.error = null;
+    }
 
     public JsonArray getRows() {
         return rows;

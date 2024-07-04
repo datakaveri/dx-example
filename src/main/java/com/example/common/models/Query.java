@@ -1,9 +1,9 @@
 package com.example.common.models;
 
-import io.vertx.core.shareddata.Shareable;
 import io.vertx.core.json.JsonArray;
+import io.vertx.core.json.JsonObject;
 
-public class Query implements Shareable {
+public class Query {
 
     private String sql;
     private JsonArray params;
@@ -21,8 +21,12 @@ public class Query implements Shareable {
         return params;
     }
 
-    @Override
-    public boolean shareable() {
-        return true; // Implementing the Shareable interface
+    public JsonObject toJson() {
+        JsonObject json = new JsonObject()
+                .put("sql", this.sql);
+        if (this.params != null) {
+            json.put("params", this.params);
+        }
+        return json;
     }
 }

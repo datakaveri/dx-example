@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface BookService {
 
-    Future<List<Book>> getAllBooks();
+    Future<List<Book>> getAll();
 
-    Future<Void> addBook(Book book);
+    Future<Void> add(Book book);
 }

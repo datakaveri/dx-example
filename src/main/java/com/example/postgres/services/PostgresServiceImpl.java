@@ -18,14 +18,16 @@ public class PostgresServiceImpl implements PostgresService {
     }
 
     @Override
-    public Future<QueryResult> executeQuery(Query query) {
-        Promise<QueryResult> promise = Promise.promise();
+    public Future<JsonObject> executeQuery(JsonObject queryJson) {
+        Query query = new Query(queryJson.getString("sql"), queryJson.getJsonArray("params"));
+        
+        Promise<JsonObject> promise = Promise.promise();
         client.getConnection(ar -> {
             if (ar.succeeded()) {
                 SQLConnection connection = ar.result();
                 connection.queryWithParams(query.getSql(), query.getParams(), res -> {
                     if (res.succeeded()) {
-                        promise.complete(new QueryResult(res.result().getRows()));
+                        promise.complete(new QueryResult(res.result().getRows()).toJson());
                     } else {
                         promise.fail(res.cause());
                     }
@@ -39,7 +41,9 @@ public class PostgresServiceImpl implements PostgresService {
     }
 
     @Override
-    public Future<Void> executeUpdate(Query query) {
+    public Future<Void> executeUpdate(JsonObject queryJson) {
+        Query query = new Query(queryJson.getString("sql"), queryJson.getJsonArray("params"));
+
         Promise<Void> promise = Promise.promise();
         client.getConnection(ar -> {
             if (ar.succeeded()) {
