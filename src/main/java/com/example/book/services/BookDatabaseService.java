@@ -26,7 +26,7 @@ public class BookDatabaseService extends AbstractDatabaseService<Book> implement
         Promise<List<Book>> promise = Promise.promise();
         Query query = new Query("SELECT * FROM books", new JsonArray());
 
-        postgresService.executeQuery(query.toJson()).onComplete(ar -> {
+        postgresService.executeQuery(query).onComplete(ar -> {
             if (ar.succeeded()) {
                 QueryResult result = new QueryResult(ar.result());
                 List<Book> books = fromJsonArray(result.getRows());
@@ -45,7 +45,7 @@ public class BookDatabaseService extends AbstractDatabaseService<Book> implement
         JsonArray params = new JsonArray().add(book.getTitle()).add(book.getAuthor());
         Query query = new Query("INSERT INTO books (title, author) VALUES (?, ?)", params);
 
-        postgresService.executeUpdate(query.toJson()).onComplete(ar -> {
+        postgresService.executeUpdate(query).onComplete(ar -> {
             if (ar.succeeded()) {
                 promise.complete();
             } else {

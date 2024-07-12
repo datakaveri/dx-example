@@ -29,11 +29,11 @@ public class PostgresVerticle extends AbstractVerticle {
         startPromise.complete();
     }
 
-    private void handleDatabaseQuery(Message<JsonObject> message) {
-        JsonObject queryJson = message.body();
+    private void handleDatabaseQuery(Message<Query> message) {
+        Query query = message.body();
         
         PostgresService service = PostgresService.createProxy(vertx, "postgres.service");
-        service.executeQuery(queryJson).onComplete(ar -> {
+        service.executeQuery(query).onComplete(ar -> {
             if (ar.succeeded()) {
                 message.reply(new JsonObject().put("result", new QueryResult(ar.result()).getRows()));
             } else {
@@ -42,10 +42,10 @@ public class PostgresVerticle extends AbstractVerticle {
         });
     }
 
-    private void handleDatabaseUpdate(Message<JsonObject> message) {
-        JsonObject queryJson = message.body();
+    private void handleDatabaseUpdate(Message<Query> message) {
+        Query query = message.body();
         PostgresService service = PostgresService.createProxy(vertx, "postgres.service");
-        service.executeUpdate(queryJson).onComplete(ar -> {
+        service.executeUpdate(query).onComplete(ar -> {
             if (ar.succeeded()) {
                 message.reply(new JsonObject().put("success", true));
             } else {
