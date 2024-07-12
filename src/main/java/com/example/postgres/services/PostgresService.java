@@ -13,10 +13,10 @@ import com.example.common.models.QueryResult;
 @ProxyGen
 public interface PostgresService {
     
-    Future<JsonObject> executeQuery(JsonObject queryJson);
+    Future<JsonObject> executeQuery(Query query);
     
     
-    Future<Void> executeUpdate(JsonObject queryJosn);
+    Future<Void> executeUpdate(Query query);
 
     static PostgresService createProxy(Vertx vertx, String address) {
         return new PostgresServiceVertxEBProxy(vertx, address);

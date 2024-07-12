@@ -26,7 +26,7 @@ public class UserDatabaseService extends AbstractDatabaseService<User> implement
         Promise<List<User>> promise = Promise.promise();
         Query query = new Query("SELECT * FROM users", new JsonArray());
 
-        postgresService.executeQuery(query.toJson()).onComplete(ar -> {
+        postgresService.executeQuery(query).onComplete(ar -> {
             if (ar.succeeded()) {
                 QueryResult result = new QueryResult(ar.result());
                 List<User> users = fromJsonArray(result.getRows());
@@ -45,7 +45,7 @@ public class UserDatabaseService extends AbstractDatabaseService<User> implement
         JsonArray params = new JsonArray().add(user.getName()).add(user.getEmail());
         Query query = new Query("INSERT INTO users (name, email) VALUES (?, ?)", params);
 
-        postgresService.executeUpdate(query.toJson()).onComplete(ar -> {
+        postgresService.executeUpdate(query).onComplete(ar -> {
             if (ar.succeeded()) {
                 promise.complete();
             } else {

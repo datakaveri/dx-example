@@ -10,7 +10,7 @@ import io.vertx.core.Promise;
 import io.vertx.ext.sql.SQLConnection;
 
 public class PostgresServiceImpl implements PostgresService {
-    
+
     private final JDBCClient client;
 
     public PostgresServiceImpl(Vertx vertx, JsonObject config) {
@@ -18,9 +18,7 @@ public class PostgresServiceImpl implements PostgresService {
     }
 
     @Override
-    public Future<JsonObject> executeQuery(JsonObject queryJson) {
-        Query query = new Query(queryJson.getString("sql"), queryJson.getJsonArray("params"));
-        
+    public Future<JsonObject> executeQuery(Query query) {
         Promise<JsonObject> promise = Promise.promise();
         client.getConnection(ar -> {
             if (ar.succeeded()) {
@@ -41,9 +39,7 @@ public class PostgresServiceImpl implements PostgresService {
     }
 
     @Override
-    public Future<Void> executeUpdate(JsonObject queryJson) {
-        Query query = new Query(queryJson.getString("sql"), queryJson.getJsonArray("params"));
-
+    public Future<Void> executeUpdate(Query query) {
         Promise<Void> promise = Promise.promise();
         client.getConnection(ar -> {
             if (ar.succeeded()) {
