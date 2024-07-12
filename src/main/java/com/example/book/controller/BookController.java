@@ -32,6 +32,7 @@ public class BookController extends AbstractVerticle {
     }
 
     private void getAllBooks(RoutingContext context) {
+        
         bookService.getAll().onComplete(ar -> {
             if (ar.succeeded()) {
                 List<Book> books = ar.result();

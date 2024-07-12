@@ -4,7 +4,6 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.eventbus.Message;
 import io.vertx.core.json.JsonObject;
-import com.example.common.models.Query;
 import com.example.common.models.QueryResult;
 import com.example.postgres.services.PostgresService;
 import com.example.postgres.services.PostgresServiceImpl;
