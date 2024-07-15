@@ -10,13 +10,13 @@ public class Query {
     private String sql;
     private JsonArray params;
 
+    // Required by @DataObject for deserialization and reflection
+    public Query() {
+    }
+
     public Query(String sql, JsonArray params) {
         this.sql = sql;
         this.params = params;
-    }
-
-    public Query() {
-        // Required by @DataObject
     }
 
     public String getSql() {
@@ -47,19 +47,9 @@ public class Query {
         return json;
     }
 
-    // Deserializer method
-    public static Query fromJson(JsonObject json) {
-        return new Query(json.getString("sql"), json.getJsonArray("params"));
-    }
-
-    // Converter method for @DataObject
+    // Constructor for @DataObject
     public Query(JsonObject json) {
-        QueryConverter.fromJson(json, this);
-    }
-
-    public JsonObject toJsonDataObject() {
-        JsonObject json = new JsonObject();
-        QueryConverter.toJson(this, json);
-        return json;
+        this.sql = json.getString("sql");
+        this.params = json.getJsonArray("params");
     }
 }
