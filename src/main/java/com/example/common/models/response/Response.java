@@ -1,17 +1,8 @@
-package com.example.common.models;
+package com.example.common.models.response;
 
 import io.vertx.core.json.JsonObject;
 
-/**
- * Response Object for passing URN-based messages/responses between verticles,
- * especially in case of failures. Parameters include:
- * - type    : String representation of URN like urn:dx:rs:SomeErrorURN
- * - status  : HTTP status code (e.g., 404, 400, etc.)
- * - title   : Brief error title
- * - detail  : Detailed message
- */
 public class Response {
-
     private String type;
     private int status;
     private String title;
@@ -26,12 +17,15 @@ public class Response {
 
     public JsonObject toJson() {
         JsonObject json = new JsonObject();
+
         json.put("type", type);
         json.put("status", status);
         json.put("title", title);
         json.put("detail", detail);
+
         return json;
     }
+
 
     public static class Builder {
         private String type;
@@ -39,7 +33,7 @@ public class Response {
         private String title;
         private String detail;
 
-        public Builder withType(String type) {
+        public Builder withUrn(String type) {
             this.type = type;
             return this;
         }
@@ -64,6 +58,7 @@ public class Response {
         }
     }
 
+
     public String getType() {
         return type;
     }
@@ -84,4 +79,6 @@ public class Response {
     public String toString() {
         return toJson().toString();
     }
+
+
 }
