@@ -8,6 +8,7 @@ import com.example.postgres.services.PostgresService;
 import com.example.user.models.User;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
+import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import org.apache.logging.log4j.LogManager;
@@ -19,7 +20,6 @@ import java.util.stream.Collectors;
 
 import static com.example.common.models.response.HttpStatusCode.CONFLICT;
 import static com.example.common.models.response.HttpStatusCode.NOT_FOUND;
-
 public class UserDatabaseService extends AbstractDatabaseService<User> implements UserService {
     private static final Logger LOGGER = LogManager.getLogger(UserDatabaseService.class);
 
@@ -32,6 +32,7 @@ public class UserDatabaseService extends AbstractDatabaseService<User> implement
 
     @Override
     public Future<List<User>> getAll() {
+        LOGGER.info(":inside getAll..");
         Promise<List<User>> promise = Promise.promise();
         Query query = new Query("SELECT * FROM users", new JsonArray());
 

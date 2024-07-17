@@ -7,7 +7,6 @@ import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 import com.example.common.models.Query;
-import com.example.common.models.QueryResult;
 
 @VertxGen
 @ProxyGen
