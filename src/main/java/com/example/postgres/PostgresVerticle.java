@@ -29,6 +29,7 @@ public class PostgresVerticle extends AbstractVerticle {
         consumer = binder.setAddress("postgres.service").register(PostgresService.class, service);
         LOGGER.info("Postgres verticle started.");
         startPromise.complete();
+        LOGGER.info(vertx.eventBus());
     }
     @Override
     public void stop() {

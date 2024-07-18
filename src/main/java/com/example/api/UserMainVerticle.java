@@ -19,34 +19,26 @@ public class UserMainVerticle extends AbstractVerticle {
     public void start(Promise<Void> startPromise) {
         LOGGER.info("Starting UserMainVerticle");
         LOGGER.info(vertx.eventBus());
-        vertx.deployVerticle(new PostgresVerticle(), postgresRes -> {
-            if (postgresRes.succeeded()) {
-                LOGGER.info("PostgresVerticle deployed successfully");
+        
 
-                LOGGER.info("Deploying UserVerticle");
+        // Create proxy for PostgresService
+        PostgresService postgresService = PostgresService.createProxy(vertx, "postgres.service");
 
-                // Create proxy for PostgresService
-                PostgresService postgresService = PostgresService.createProxy(vertx, "postgres.service");
+        UserService userService = new UserDatabaseService(postgresService);
 
-                UserService userService = new UserDatabaseService(postgresService);
+        UserController userController = new UserController(userService);
+        JsonObject config = new JsonObject().put("port", config().getInteger("port", 8081));
 
-                UserController userController = new UserController(userService);
-                JsonObject config = new JsonObject().put("port", config().getInteger("port", 8081));
-
-                // Deploy UserController verticle
-                vertx.deployVerticle(userController, new DeploymentOptions().setConfig(config), deploy -> {
-                    if (deploy.succeeded()) {
-                        LOGGER.info("UserController deployed successfully on port " + config.getInteger("port"));
-                        startPromise.complete();
-                    } else {
-                        LOGGER.error("Failed to deploy UserController: " + deploy.cause().getMessage());
-                        startPromise.fail(deploy.cause());
-                    }
-                });
+        // Deploy UserController verticle
+        vertx.deployVerticle(userController, new DeploymentOptions().setConfig(config), deploy -> {
+            if (deploy.succeeded()) {
+                LOGGER.info("UserController deployed successfully on port " + config.getInteger("port"));
+                startPromise.complete();
             } else {
-                LOGGER.error("Failed to deploy PostgresVerticle", postgresRes.cause());
-                startPromise.fail(postgresRes.cause());
+                LOGGER.error("Failed to deploy UserController: " + deploy.cause().getMessage());
+                startPromise.fail(deploy.cause());
             }
         });
+           
     }
 }

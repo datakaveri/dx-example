@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   postgres:
     build:
@@ -8,7 +10,7 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
     networks:
-      - bridge
+      - app-network
 
   postgres-service:
     build:
@@ -22,8 +24,11 @@ services:
       - DB_NAME=mydb
       - DB_USER=user
       - DB_PASSWORD=password
+      - HZ_PORT=5701
+    ports:
+      - "5701:5701"
     networks:
-      - bridge
+      - app-network
 
   user-service:
     build:
@@ -32,10 +37,13 @@ services:
     depends_on:
       - postgres
       - postgres-service
+    environment:
+      - HZ_PORT=5702
     ports:
       - "8081:8081"
+      - "5702:5702"
     networks:
-      - bridge
+      - app-network
 
   book-service:
     build:
@@ -44,13 +52,16 @@ services:
     depends_on:
       - postgres
       - postgres-service
+    environment:
+      - HZ_PORT=5703
     ports:
       - "8082:8082"
+      - "5703:5703"
     networks:
-      - bridge
+      - app-network
 
 networks:
-  bridge:
+  app-network:
     driver: bridge
 
 volumes:

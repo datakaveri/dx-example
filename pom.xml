@@ -26,6 +26,17 @@
     <dependencies>
         <dependency>
             <groupId>io.vertx</groupId>
+            <artifactId>vertx-infinispan</artifactId>
+            <version>${vertx.version}</version>
+        </dependency>
+        <dependency>
+    <groupId>org.infinispan</groupId>
+    <artifactId>infinispan-core</artifactId>
+    <version>13.0.22.Final</version>
+    <scope>test</scope>
+</dependency>
+        <dependency>
+            <groupId>io.vertx</groupId>
             <artifactId>vertx-core</artifactId>
             <version>${vertx.version}</version>
         </dependency>
