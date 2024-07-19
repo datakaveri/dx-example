@@ -1,14 +1,13 @@
 package com.example.api;
 
-import com.example.postgres.PostgresVerticle;
 import com.example.postgres.services.PostgresService;
 import com.example.user.controller.UserController;
 import com.example.user.services.UserDatabaseService;
 import com.example.user.services.UserService;
-import io.vertx.core.AbstractVerticle;
-import io.vertx.core.DeploymentOptions;
-import io.vertx.core.Promise;
+import com.hazelcast.config.Config;
+import io.vertx.core.*;
 import io.vertx.core.json.JsonObject;
+import io.vertx.spi.cluster.hazelcast.HazelcastClusterManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,35 +16,30 @@ public class UserMainVerticle extends AbstractVerticle {
 
     @Override
     public void start(Promise<Void> startPromise) {
-        LOGGER.info("Starting UserMainVerticle");
-        LOGGER.info(vertx.eventBus());
-        vertx.deployVerticle(new PostgresVerticle(), postgresRes -> {
-            if (postgresRes.succeeded()) {
-                LOGGER.info("PostgresVerticle deployed successfully");
+        Config hazelcastConfig = new Config();
+        HazelcastClusterManager clusterManager = new HazelcastClusterManager(hazelcastConfig);
 
-                LOGGER.info("Deploying UserVerticle");
-
-                // Create proxy for PostgresService
+        VertxOptions options = new VertxOptions().setClusterManager(clusterManager);
+        Vertx.clusteredVertx(options, res -> {
+            if (res.succeeded()) {
+                vertx = res.result();
                 PostgresService postgresService = PostgresService.createProxy(vertx, "postgres.service");
 
                 UserService userService = new UserDatabaseService(postgresService);
-
                 UserController userController = new UserController(userService);
-                JsonObject config = new JsonObject().put("port", config().getInteger("port", 8081));
 
-                // Deploy UserController verticle
-                vertx.deployVerticle(userController, new DeploymentOptions().setConfig(config), deploy -> {
-                    if (deploy.succeeded()) {
+                JsonObject config = new JsonObject().put("port", config().getInteger("port", 8081));
+                vertx.deployVerticle(userController, new DeploymentOptions().setConfig(config), handler -> {
+                    if (handler.succeeded()) {
                         LOGGER.info("UserController deployed successfully on port " + config.getInteger("port"));
                         startPromise.complete();
                     } else {
-                        LOGGER.error("Failed to deploy UserController: " + deploy.cause().getMessage());
-                        startPromise.fail(deploy.cause());
+                        LOGGER.error("Failed to deploy UserController: " + handler.cause().getMessage());
+                        startPromise.fail(handler.cause());
                     }
                 });
             } else {
-                LOGGER.error("Failed to deploy PostgresVerticle", postgresRes.cause());
-                startPromise.fail(postgresRes.cause());
+                LOGGER.error("Clustered Vert.x start failed: " + res.cause());
             }
         });
     }

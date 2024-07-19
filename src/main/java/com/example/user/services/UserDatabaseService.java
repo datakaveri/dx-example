@@ -8,7 +8,6 @@ import com.example.postgres.services.PostgresService;
 import com.example.user.models.User;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
-import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import org.apache.logging.log4j.LogManager;
@@ -117,14 +116,13 @@ public class UserDatabaseService extends AbstractDatabaseService<User> implement
 
         postgresService.executeQuery(query).onComplete(ar -> {
             if (ar.succeeded()) {
-                QueryResult result = new QueryResult(ar.result());
-                List<JsonObject> rows = result.getRows().getList();
-                if (rows.isEmpty()) {
+                JsonObject res = ar.result();
+                if (res.getJsonArray("rows").isEmpty()) {
                     responseBuilder =
                             new ResponseBuilder().setTypeAndTitle(404).setMessage(NOT_FOUND.getDescription());
                     promise.fail(responseBuilder.getResponse().toString());
                 } else {
-                    promise.complete(rows.get(0).mapTo(User.class));
+                    promise.complete(res.getJsonArray("rows").getJsonObject(0).mapTo(User.class));
                 }
             } else {
                 promise.fail(ar.cause());
@@ -135,8 +133,8 @@ public class UserDatabaseService extends AbstractDatabaseService<User> implement
     }
 
     @Override
-    public Future<List<JsonObject>> getUsersWithBooks() {
-        Promise<List<JsonObject>> promise = Promise.promise();
+    public Future<JsonArray> getUsersWithBooks() {
+        Promise<JsonArray> promise = Promise.promise();
 
         String sql = "SELECT users.id AS user_id, users.name, users.email, books.id AS book_id, books.title, books.author " +
                 "FROM users " +
@@ -147,9 +145,8 @@ public class UserDatabaseService extends AbstractDatabaseService<User> implement
 
         postgresService.executeQuery(query).onComplete(ar -> {
             if (ar.succeeded()) {
-                QueryResult result = new QueryResult(ar.result());
-                List<JsonObject> usersWithBooks = result.getRows().getList();
-                promise.complete(usersWithBooks);
+                JsonObject res = ar.result();
+                promise.complete(res.getJsonArray("rows"));
             } else {
                 promise.fail(ar.cause());
             }
