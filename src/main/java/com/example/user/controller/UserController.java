@@ -172,7 +172,7 @@ public class UserController extends AbstractVerticle {
         HttpServerResponse response = context.response();
         userService.getUsersWithBooks().onComplete(ar -> {
             if (ar.succeeded()) {
-                JsonArray resultArray = new JsonArray(ar.result());
+                JsonArray resultArray = ar.result();
                 SuccessResponseHandler.handleSuccessResponse(response, ResponseType.Ok.getCode(), resultArray);
             } else {
                 LOGGER.error("Failed to retrieve users with books: " + ar.cause().getMessage());
