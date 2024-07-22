@@ -1,16 +1,17 @@
 package com.example.api;
 
-import com.example.postgres.PostgresVerticle;
+import com.example.elastic.ElasticsearchVerticle;
 import com.hazelcast.config.Config;
 import io.vertx.core.AbstractVerticle;
-import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
 import io.vertx.spi.cluster.hazelcast.HazelcastClusterManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class MainVerticle extends AbstractVerticle {
-    private static final Logger LOGGER = LogManager.getLogger(MainVerticle.class);
+import static io.vertx.core.Vertx.clusteredVertx;
+
+public class ElasticMainVerticle extends AbstractVerticle {
+    private static final Logger LOGGER = LogManager.getLogger(ElasticMainVerticle.class);
 
     @Override
     public void start() {
@@ -19,14 +20,14 @@ public class MainVerticle extends AbstractVerticle {
 
         VertxOptions options = new VertxOptions().setClusterManager(clusterManager);
 
-        Vertx.clusteredVertx(options, res -> {
+        clusteredVertx(options, res -> {
             if (res.succeeded()) {
                 vertx = res.result();
-                vertx.deployVerticle(new PostgresVerticle(), handler -> {
+                vertx.deployVerticle(new ElasticsearchVerticle(), handler -> {
                     if (handler.succeeded()) {
-                        LOGGER.info("PostgresVerticle deployed successfully");
+                        LOGGER.info("ElasticsearchVerticle deployed successfully");
                     } else {
-                        LOGGER.error("Failed to deploy PostgresVerticle: " + handler.cause().getMessage());
+                        LOGGER.error("Failed to deploy ElasticsearchVerticle: " + handler.cause().getMessage());
                     }
                 });
             } else {

@@ -1,4 +1,13 @@
 services:
+  elasticsearch-service:
+    build:
+      context: .
+      dockerfile: ./Dockerfile-elastic
+    ports:
+      - "443:443"
+    networks:
+      - app-network
+
   postgres:
     build:
       context: .
@@ -8,7 +17,7 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
     networks:
-      - bridge
+      - app-network
 
   postgres-service:
     build:
@@ -23,7 +32,7 @@ services:
       - DB_USER=user
       - DB_PASSWORD=password
     networks:
-      - bridge
+      - app-network
 
   user-service:
     build:
@@ -35,7 +44,7 @@ services:
     ports:
       - "8081:8081"
     networks:
-      - bridge
+      - app-network
 
   book-service:
     build:
@@ -47,10 +56,21 @@ services:
     ports:
       - "8082:8082"
     networks:
-      - bridge
+      - app-network
+
+  device-service:
+    build:
+      context: .
+      dockerfile: ./Dockerfile-device
+    depends_on:
+      - elasticsearch-service
+    ports:
+      - "8083:8083"
+    networks:
+      - app-network
 
 networks:
-  bridge:
+  app-network:
     driver: bridge
 
 volumes:
