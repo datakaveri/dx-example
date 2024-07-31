@@ -1,0 +1,30 @@
+name: Update Wiki
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update-wiki:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+
+      - name: Clone Wiki Repository
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          git clone https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.wiki.git wiki
+
+      - name: Copy Documentation to Wiki
+        run: |
+          cp -r docs/* wiki/
+          cd wiki
+          git add .
+          git commit -m "Update wiki documentation from main repository"
+          git push
