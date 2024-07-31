@@ -1,32 +1,79 @@
-# Setup and Installation
+![IUDX](./iudx.png)
 
-## Prerequisites
-- Docker
-- Docker Compose
-- Java 11
-- Maven
-
-## Installation Steps
-1. Clone the repository:
-    ```bash
-    git clone https://github.com/datakaveri/dx-example
-    cd dx-example
-    ```
-
-2. Build the project:
-    ```bash
-    mvn clean install
-    ```
-
-3. Start the services using Docker Compose:
-    ```bash
-    docker-compose up --build
-    ```
+# Setup and Installation Guide
 
 ## Configuration
-Ensure the following environment variables are set in your `docker-compose.yml`:
-- `DB_HOST`
-- `DB_PORT`
-- `DB_NAME`
-- `DB_USER`
-- `DB_PASSWORD`
+### Modules
+
+#### Api Server Verticle
+
+| Key Name           | Value Datatype    | Value Example | Description |
+| :----------------  | :------: | :----  |  :----  |
+| dxApiBasePath      |   True   | 23.99  |  :----  |
+| dxCatalogueBasePath|   True   | 23.99  |  :----  |
+| dxAuthBasePath     |  False   | 19.99  |  :----  |
+
+### Other Configuration
+
+| Key Name           | Value Datatype    | Value Example | Description |
+| :----------------  | :------: | :----  |  :----  |
+| dxApiBasePath      |   True   | 23.99  |  :----  |
+| dxCatalogueBasePath|   True   | 23.99  |  :----  |
+| dxAuthBasePath     |  False   | 19.99  |  :----  |
+
+
+## Dependencies
+### External
+
+| Software Name     | Purpose    | 
+| :---------------- | :------    |
+| RabbitMQ      | For publishing audit logs |
+| AAA Server    | For validating  |
+
+
+### Prerequisites
+
+#### RabbitMQ
+RabbitMQ shall have an exchange to allow the publication. 
+
+| Exchange Name     | vHost    | Description |
+| :---------------- | :------  | :----       |
+| audit-server      |   IUDX-Internal   | Uses this exchange for publishing audit message |
+
+#### PostgresQL
+
+An example template for Database. 
+
+| Exchange Name     | vHost    | Description |
+| :---------------- | :------  | :----       |
+| audit-server      |   IUDX-Internal   | Uses this exchange for publishing audit message |
+
+
+
+## Installation Steps
+### Maven
+### JAR
+### Docker
+
+## Logging and Monitoring
+
+## Testing
+### Unit Testing
+
+Explaing how to execute tests. 
+
+### Code Coverage Testing
+
+Explaing how to execute tests. 
+
+### Integration Testing
+
+Explaing how to execute tests. 
+
+### Performance Testing
+
+Explaing how to execute tests. 
+
+### Security Testing
+
+Explaing how to execute tests. 
