@@ -49,6 +49,17 @@ services:
     networks:
       - bridge
 
+  immudb:
+    ports:
+      - '3322:3322'
+    container_name: immudb
+    environment:
+      - IMMUDB_ADDRESS=127.0.0.1
+      - IMMUDB_AUTH=false
+    image: 'codenotary/immudb:latest'
+    networks:
+      - bridge
+
 networks:
   bridge:
     driver: bridge

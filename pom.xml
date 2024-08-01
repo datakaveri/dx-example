@@ -100,6 +100,22 @@
             <artifactId>jackson-databind</artifactId>
             <version>2.13.4.1</version> <!-- Ensure you use the latest version -->
         </dependency>
+       <!-- <dependency>
+            <groupId>io.codenotary</groupId>
+            <artifactId>immudb4j</artifactId>
+            <version>0.1.8</version>
+        </dependency>-->
+
+       <!-- <dependency>
+            <groupId>org.immudb</groupId>
+            <artifactId>immudb-jdbc</artifactId>
+            <version>1.1.2</version> &lt;!&ndash; Replace with the appropriate version &ndash;&gt;
+        </dependency>-->
+        <dependency>
+            <groupId>io.codenotary</groupId>
+            <artifactId>immudb4j</artifactId>
+            <version>1.0.1</version>
+        </dependency>
     </dependencies>
 
     <build>
