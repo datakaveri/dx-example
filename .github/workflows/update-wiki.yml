@@ -12,6 +12,17 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+
+      - name: Install Redoc CLI
+        run: npm install -g @redocly/cli
+
+      - name: Generate API Documentation
+        run: |
+          redocly build-docs docs/openapi.yaml -o docs/api.html
 
       - name: Clone Wiki Repository
         env:
@@ -23,7 +34,8 @@ jobs:
 
       - name: Copy Documentation to Wiki
         run: |
-          cp -r docs/* wiki/
+          cp docs/api.html wiki/API_Documentation.html
+          cp docs/introduction.md wiki/Home.md
           cd wiki
           git add .
           git commit -m "Update wiki documentation from main repository"
