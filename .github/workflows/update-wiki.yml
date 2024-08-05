@@ -17,15 +17,20 @@ jobs:
         with:
           node-version: '14'
 
-      - name: Install Swagger CLI
-        run: npm install -g swagger-cli
+      - name: Install Swagger UI
+        run: |
+          npm install -g swagger-cli
+          npm install -g swagger-ui-dist
 
       - name: Generate API Documentation
         run: |
-          swagger-cli bundle docs/openapi.yaml --outfile docs/api.html --type html
+          mkdir -p docs/swagger-ui
+          cp -r node_modules/swagger-ui-dist/* docs/swagger-ui/
+          swagger-cli bundle docs/openapi.yaml --outfile docs/swagger-ui/openapi.json --type json
+          echo '<!DOCTYPE html><html><head><title>API Documentation</title><link rel="stylesheet" type="text/css" href="swagger-ui.css" /></head><body><div id="swagger-ui"></div><script src="swagger-ui-bundle.js"> </script><script>window.onload = function() { window.ui = SwaggerUIBundle({ url: "openapi.json", dom_id: "#swagger-ui", }); }</script></body></html>' > docs/swagger-ui/index.html
 
       - name: List files in docs directory
-        run: ls -la docs
+        run: ls -la docs/swagger-ui
 
       - name: Clone Wiki Repository
         env:
@@ -40,8 +45,7 @@ jobs:
 
       - name: Copy Documentation to Wiki
         run: |
-          cp docs/api.html wiki/API_Documentation.html
-          cp docs/Explanations.md wiki/Home.md
+          cp -r docs/swagger-ui/* wiki/
           ls -la wiki  # List files to verify copying
           cd wiki
           git add .
