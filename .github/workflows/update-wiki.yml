@@ -35,7 +35,7 @@ jobs:
       - name: Copy Documentation to Wiki
         run: |
           cp docs/api.html wiki/API_Documentation.html
-          cp docs/introduction.md wiki/Home.md
+          cp docs/Explanations.md wiki/Home.md
           cd wiki
           git add .
           git commit -m "Update wiki documentation from main repository"
