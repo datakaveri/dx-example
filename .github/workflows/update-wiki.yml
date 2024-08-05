@@ -17,12 +17,12 @@ jobs:
         with:
           node-version: '14'
 
-      - name: Install Redoc CLI
-        run: npm install -g @redocly/cli
+      - name: Install Swagger CLI
+        run: npm install -g swagger-cli
 
       - name: Generate API Documentation
         run: |
-          redocly build-docs docs/openapi.yaml -o docs/api.html
+          swagger-cli bundle docs/openapi.yaml --outfile docs/api.html --type html
 
       - name: List files in docs directory
         run: ls -la docs
