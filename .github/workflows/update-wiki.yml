@@ -24,6 +24,9 @@ jobs:
         run: |
           redocly build-docs docs/openapi.yaml -o docs/api.html
 
+      - name: List files in docs directory
+        run: ls -la docs
+
       - name: Clone Wiki Repository
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -32,11 +35,18 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git clone https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.wiki.git wiki
 
+      - name: List files in wiki directory before copying
+        run: ls -la wiki
+
       - name: Copy Documentation to Wiki
         run: |
           cp docs/api.html wiki/API_Documentation.html
           cp docs/Explanations.md wiki/Home.md
+          ls -la wiki  # List files to verify copying
           cd wiki
           git add .
           git commit -m "Update wiki documentation from main repository"
           git push
+
+      - name: List files in wiki directory after push
+        run: ls -la wiki
