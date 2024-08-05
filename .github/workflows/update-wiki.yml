@@ -17,10 +17,13 @@ jobs:
         with:
           node-version: '14'
 
-      - name: Install Swagger UI
+      - name: Install Swagger UI and Swagger CLI
         run: |
           npm install -g swagger-cli
-          npm install -g swagger-ui-dist
+          npm install swagger-ui-dist
+
+      - name: Verify Swagger UI Installation
+        run: ls -la node_modules/swagger-ui-dist
 
       - name: Generate API Documentation
         run: |
