@@ -59,8 +59,8 @@ jobs:
           if ! grep -q "## API Documentation" wiki/_Sidebar.md; then
             echo "## API Documentation" >> wiki/_Sidebar.md
           fi
-          if ! grep -q "* [API Documentation](swagger-ui/index.html)" wiki/_Sidebar.md; then
-            echo "* [API Documentation](swagger-ui/index.html)" >> wiki/_Sidebar.md
+          if ! grep -q "* [API Documentation](index.html)" wiki/_Sidebar.md; then
+            echo "* [API Documentation](index.html)" >> wiki/_Sidebar.md
           fi
           cat wiki/_Sidebar.md  # Output the updated _Sidebar.md
 
