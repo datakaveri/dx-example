@@ -53,29 +53,14 @@ jobs:
           cp -r docs/swagger-ui/* wiki/
           ls -la wiki  # List files to verify copying
 
-      - name: Verify Paths and Generate API Documentation Markdown
-        run: |
-          echo "Verifying paths and generating API Documentation Markdown..."
-          # Check paths
-          if [ -f wiki/swagger-ui-bundle.js ] && [ -f wiki/swagger-ui-standalone-preset.js ] && [ -f wiki/openapi.json ]; then
-            echo "All required files are in place."
-            # Generate Markdown file
-            echo "# API Documentation" > wiki/API-Documentation.md
-            echo '<div id="swagger-ui"></div><script src="swagger-ui-bundle.js"></script><script src="swagger-ui-standalone-preset.js"></script><script>window.onload = function() { window.ui = SwaggerUIBundle({ url: "openapi.json", dom_id: "#swagger-ui", presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset], layout: "StandaloneLayout" }); }</script>' >> wiki/API-Documentation.md
-          else
-            echo "Required files are missing."
-            exit 1
-          fi
-          cat wiki/API-Documentation.md  # Output the generated API-Documentation.md
-
       - name: Update Sidebar
         run: |
           echo "Updating _Sidebar.md..."
           if ! grep -q "## API Documentation" wiki/_Sidebar.md; then
             echo "## API Documentation" >> wiki/_Sidebar.md
           fi
-          if ! grep -q "* [API Documentation](API-Documentation.md)" wiki/_Sidebar.md; then
-            echo "* [API Documentation](API-Documentation.md)" >> wiki/_Sidebar.md
+          if ! grep -q "* [API Documentation](index.html)" wiki/_Sidebar.md; then
+            echo "* [API Documentation](index.html)" >> wiki/_Sidebar.md
           fi
           cat wiki/_Sidebar.md  # Output the updated _Sidebar.md
 
