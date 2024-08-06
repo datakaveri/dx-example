@@ -52,6 +52,20 @@ jobs:
           echo "Copying files..."
           cp -r docs/swagger-ui/* wiki/
           ls -la wiki  # List files to verify copying
+
+      - name: Update Sidebar
+        run: |
+          echo "Updating _Sidebar.md..."
+          if ! grep -q "## API Documentation" wiki/_Sidebar.md; then
+            echo "## API Documentation" >> wiki/_Sidebar.md
+          fi
+          if ! grep -q "* [API Documentation](swagger-ui/index.html)" wiki/_Sidebar.md; then
+            echo "* [API Documentation](swagger-ui/index.html)" >> wiki/_Sidebar.md
+          fi
+          cat wiki/_Sidebar.md  # Output the updated _Sidebar.md
+
+      - name: Commit and Push Changes to Wiki
+        run: |
           cd wiki
           git add .
           git commit -m "Update wiki documentation from main repository" || echo "No changes to commit"
