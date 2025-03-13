@@ -1,4 +1,4 @@
-package com.example.common.models.response;
+package com.example.postgres.models.response;
 
 import java.util.stream.Stream;
 

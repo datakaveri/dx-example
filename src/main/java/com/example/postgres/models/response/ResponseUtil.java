@@ -1,4 +1,4 @@
-package com.example.common.models.response;
+package com.example.postgres.models.response;
 
 import io.vertx.core.json.JsonObject;
 import org.apache.logging.log4j.LogManager;

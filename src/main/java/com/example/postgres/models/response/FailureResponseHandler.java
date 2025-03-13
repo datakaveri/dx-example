@@ -1,4 +1,4 @@
-package com.example.common.models.response;
+package com.example.postgres.models.response;
 
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.json.DecodeException;
@@ -6,10 +6,10 @@ import io.vertx.core.json.JsonObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import static com.example.common.models.response.HttpStatusCode.BAD_REQUEST;
-import static com.example.common.models.response.ResponseUrn.BACKING_SERVICE_FORMAT_URN;
-import static com.example.common.models.response.ResponseUrn.fromCode;
-import static com.example.common.models.response.ResponseUtil.generateResponse;
+import static com.example.postgres.models.response.HttpStatusCode.BAD_REQUEST;
+import static com.example.postgres.models.response.ResponseUrn.BACKING_SERVICE_FORMAT_URN;
+import static com.example.postgres.models.response.ResponseUrn.fromCode;
+import static com.example.postgres.models.response.ResponseUtil.generateResponse;
 import static io.netty.handler.codec.http.HttpHeaderValues.APPLICATION_JSON;
 
 public class FailureResponseHandler {

@@ -2,9 +2,9 @@ package com.example.book.controller;
 
 import com.example.book.models.Book;
 import com.example.book.services.BookService;
-import com.example.common.models.response.FailureResponseHandler;
-import com.example.common.models.response.ResponseType;
-import com.example.common.models.response.SuccessResponseHandler;
+import com.example.postgres.models.response.FailureResponseHandler;
+import com.example.postgres.models.response.ResponseType;
+import com.example.postgres.models.response.SuccessResponseHandler;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerResponse;

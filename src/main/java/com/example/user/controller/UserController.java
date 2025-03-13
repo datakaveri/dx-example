@@ -1,8 +1,8 @@
 package com.example.user.controller;
 
-import com.example.common.models.response.FailureResponseHandler;
-import com.example.common.models.response.ResponseType;
-import com.example.common.models.response.SuccessResponseHandler;
+import com.example.postgres.models.response.FailureResponseHandler;
+import com.example.postgres.models.response.ResponseType;
+import com.example.postgres.models.response.SuccessResponseHandler;
 import com.example.user.models.User;
 import com.example.user.services.UserService;
 import io.vertx.core.AbstractVerticle;
