@@ -1,9 +1,9 @@
 package com.example.user.services;
 
 import com.example.common.database.AbstractDatabaseService;
-import com.example.common.models.Query;
-import com.example.common.models.QueryResult;
-import com.example.common.models.response.ResponseBuilder;
+import com.example.postgres.models.Query;
+import com.example.postgres.models.QueryResult;
+import com.example.postgres.models.response.ResponseBuilder;
 import com.example.postgres.services.PostgresService;
 import com.example.user.models.User;
 import io.vertx.core.Future;
@@ -17,8 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.example.common.models.response.HttpStatusCode.CONFLICT;
-import static com.example.common.models.response.HttpStatusCode.NOT_FOUND;
+import static com.example.postgres.models.response.HttpStatusCode.CONFLICT;
+import static com.example.postgres.models.response.HttpStatusCode.NOT_FOUND;
 public class UserDatabaseService extends AbstractDatabaseService<User> implements UserService {
     private static final Logger LOGGER = LogManager.getLogger(UserDatabaseService.class);
 

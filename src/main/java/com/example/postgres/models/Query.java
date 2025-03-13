@@ -1,4 +1,4 @@
-package com.example.common.models;
+package com.example.postgres.models;
 
 import io.vertx.codegen.annotations.DataObject;
 import io.vertx.core.json.JsonArray;

@@ -1,9 +1,9 @@
-package com.example.common.models.response;
+package com.example.postgres.models.response;
 
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 
-import static com.example.common.models.response.HttpStatusCode.SUCCESS;
+import static com.example.postgres.models.response.HttpStatusCode.SUCCESS;
 
 public class ResponseBuilder {
 

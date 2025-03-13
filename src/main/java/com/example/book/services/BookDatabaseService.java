@@ -2,9 +2,9 @@ package com.example.book.services;
 
 import com.example.book.models.Book;
 import com.example.common.database.AbstractDatabaseService;
-import com.example.common.models.Query;
-import com.example.common.models.QueryResult;
-import com.example.common.models.response.ResponseBuilder;
+import com.example.postgres.models.Query;
+import com.example.postgres.models.QueryResult;
+import com.example.postgres.models.response.ResponseBuilder;
 import com.example.postgres.services.PostgresService;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
@@ -16,8 +16,8 @@ import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.common.models.response.HttpStatusCode.NOT_FOUND;
-import static com.example.common.models.response.HttpStatusCode.NO_CONTENT;
+import static com.example.postgres.models.response.HttpStatusCode.NOT_FOUND;
+import static com.example.postgres.models.response.HttpStatusCode.NO_CONTENT;
 
 public class BookDatabaseService extends AbstractDatabaseService<Book> implements BookService {
     private static final Logger LOGGER = LogManager.getLogger(BookDatabaseService.class);
